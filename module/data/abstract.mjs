@@ -38,11 +38,30 @@ export default class SystemDataModel extends foundry.abstract.DataModel {
   /* -------------------------------------------- */
 
   /**
+   * The field names of the base templates used for construction.
+   * @type {Set<string>}
+   * @private
+   */
+  static get _schemaTemplateFields() {
+    const fieldNames = Object.freeze(new Set(this._schemaTemplates.map(t => t.schema.keys()).flat()));
+    Object.defineProperty(this, "_schemaTemplateFields", {
+      value: fieldNames,
+      writable: false,
+      configurable: false
+    });
+    return fieldNames;
+  };
+
+  /* -------------------------------------------- */
+
+  /**
    * A list of properties that should not be mixed-in to the final type.
    * @type {Set<string>}
    * @private
    */
-  static _immiscible = new Set(["length", "mixed", "name", "prototype", "migrateData", "defineSchema"]);
+  static _immiscible = new Set(["length", "mixed", "name", "prototype", "cleanData", "_cleanData",
+    "_initializationOrder", "validateJoint", "_validateJoint", "migrateData", "_migrateData",
+    "shimData", "_shimData", "defineSchema"]);
 
   /* -------------------------------------------- */
 
@@ -71,22 +90,103 @@ export default class SystemDataModel extends foundry.abstract.DataModel {
     return a;
   }
 
-  /* -------------------------------------------- */
+
+  /* ---------------------------------------- */
+  /*  Data Cleaning                           */
+  /* ---------------------------------------- */
 
   /** @inheritdoc */
-  static migrateData(source) {
-    for ( const template of this._schemaTemplates ) {
-      template.migrateData?.(source);
-    }
-    return super.migrateData(source);
+  static cleanData(source, options) {
+    this._cleanData(source, options);
+    return super.cleanData(source, options);
   }
 
-  /* -------------------------------------------- */
+  /* ---------------------------------------- */
+
+  /** @inheritdoc */
+  static _cleanData(source, options) {
+    for ( const template of this._schemaTemplates ) {
+      template._cleanData(source, options);
+    }
+  }
+
+  /* ---------------------------------------- */
+  /*  Data Initialization                     */
+  /* ---------------------------------------- */
+
+  /** @inheritdoc */
+  static *_initializationOrder() {
+    for ( const template of this._schemaTemplates ) {
+      for ( const entry of template._initializationOrder() ) {
+        entry[1] = this.schema.get(entry[0]);
+        yield entry;
+      }
+    }
+    for ( const entry of this.schema.entries() ) {
+      if ( this._schemaTemplateFields.has(entry[0]) ) continue;
+      yield entry;
+    }
+  }
+
+  /* ---------------------------------------- */
+  /*  Data Validation                         */
+  /* ---------------------------------------- */
 
   /** @inheritdoc */
   validate(options={}) {
     if ( this.constructor._enableV10Validation === false ) return true;
     return super.validate(options);
+  }
+
+  /* -------------------------------------------- */
+
+  /** @inheritdoc */
+  static validateJoint(data) {
+    this._validateJoint(data);
+    return super.validateJoint(data);
+  }
+
+  /* -------------------------------------------- */
+
+  /** @inheritdoc */
+  static _validateJoint(data) {
+    for ( const template of this._schemaTemplates ) {
+      template._validateJoint(data);
+    }
+  }
+
+  /* ---------------------------------------- */
+  /*  Data Migration                          */
+  /* ---------------------------------------- */
+
+  /** @inheritdoc */
+  static migrateData(source) {
+    this._migrateData(source);
+    return super.migrateData(source);
+  }
+
+  /* -------------------------------------------- */
+
+  static _migrateData(source) {
+    for ( const template of this._schemaTemplates ) {
+      template._migrateData(source);
+    }
+  }
+
+  /* -------------------------------------------- */
+
+  /** @inheritdoc */
+  static shimData(source, options) {
+    this._shimData(source, options);
+    return super.shimData(source, options);
+  }
+
+  /* -------------------------------------------- */
+
+  static _shimData(source, options) {
+    for ( const template of this._schemaTemplates ) {
+      template._shimData(source, options);
+    }
   }
 
   /* -------------------------------------------- */
@@ -97,6 +197,12 @@ export default class SystemDataModel extends foundry.abstract.DataModel {
    * @returns {typeof SystemDataModel}  Final prepared type.
    */
   static mixin(...templates) {
+    for ( const template of templates ) {
+      if ( !(template.prototype instanceof SystemDataModel) ) {
+        throw new Error(`${template.name} is not a subclass of SystemDataModel`);
+      }
+    }
+
     const Base = class extends this {};
     Object.defineProperty(Base, "_schemaTemplates", {
       value: Object.seal([...this._schemaTemplates, ...templates]),
