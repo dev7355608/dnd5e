@@ -509,7 +509,7 @@
   "items": [
     {
       "_id": "yZ0HzuMNz4aMWPYH",
-      "name": "Druidic Focus: Cowbell",
+      "name": "Cowbell",
       "type": "loot",
       "system": {
         "description": {
@@ -990,11 +990,12 @@
     },
     {
       "_id": "wQlDyAuPxNVwsaeL",
-      "name": "Quarterstaff",
+      "name": "Wooden Staff",
       "type": "weapon",
+      "img": "icons/weapons/staves/staff-simple-spiral-green.webp",
       "system": {
         "description": {
-          "value": "<p>A thick shaft of wood wrapped with a sturdy grip makes a highly functional weapon in addition to a stout walking stick.</p>",
+          "value": "<p>A gnarled or naturely smooth staff of wood drawn out from a living tree, those who heed nature's call can use this to harness the incredible power of nature.</p>\n<p><strong>Spellcasting Focus</strong>. A druidic focus is a special item designed to channel the power of spells from the druid's spell list. A druid can use such an item as a spellcasting focus, using it in place of any material component which does not list a cost.</p>",
           "chat": ""
         },
         "source": {
@@ -1006,11 +1007,10 @@
         "quantity": 1,
         "weight": 4,
         "price": {
-          "value": 2,
-          "denomination": "sp"
+          "value": 5,
+          "denomination": "gp"
         },
         "attunement": 0,
-        "equipped": true,
         "rarity": "",
         "identified": true,
         "activation": {
@@ -1023,7 +1023,6 @@
           "units": ""
         },
         "cover": null,
-        "crewed": false,
         "target": {
           "value": null,
           "width": null,
@@ -1082,36 +1081,38 @@
           "conditions": ""
         },
         "properties": [
+          "foc",
           "ver"
         ],
-        "proficient": null,
-        "unidentified": {
-          "description": ""
-        },
         "type": {
           "value": "simpleM",
           "baseItem": "quarterstaff"
         },
-        "container": null
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "crewed": false,
+        "equipped": true,
+        "proficient": null
       },
-      "sort": 0,
-      "flags": {
-        "core": {
-          "sourceId": "Compendium.dnd5e.items.g2dWN7PQiMRYWzyk"
-        }
-      },
-      "img": "icons/weapons/staves/staff-simple-gold.webp",
       "effects": [],
       "folder": null,
+      "sort": 0,
       "ownership": {
         "default": 0
       },
+      "flags": {
+        "core": {
+          "sourceId": "Compendium.dnd5e.items.Item.FF1ktpb2YSiyv896"
+        }
+      },
       "_stats": {
         "systemId": "dnd5e",
-        "systemVersion": "2.0.3",
-        "coreVersion": "10.290",
-        "createdTime": null,
-        "modifiedTime": 1670011640689,
+        "systemVersion": "3.0.1",
+        "coreVersion": "11.315",
+        "createdTime": 1661787233543,
+        "modifiedTime": 1707061153569,
         "lastModifiedBy": "dnd5ebuilder0000"
       },
       "_key": "!actors.items!ZGDys30OS76uYaIO.wQlDyAuPxNVwsaeL"
@@ -4874,8 +4875,8 @@
     "systemId": "dnd5e",
     "systemVersion": "3.0.0",
     "coreVersion": "11.315",
-    "createdTime": 1661787232171,
-    "modifiedTime": 1706819059111,
+    "createdTime": 1706819059111,
+    "modifiedTime": 1707061154913,
     "lastModifiedBy": "dnd5ebuilder0000"
   },
   "_key": "!actors!ZGDys30OS76uYaIO"
