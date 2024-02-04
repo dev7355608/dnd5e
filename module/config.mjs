@@ -1306,6 +1306,7 @@ DND5E.validProperties = {
   ]),
   equipment: new Set([
     "concentration",
+    "foc",
     "mgc"
   ]),
   feat: new Set([
@@ -1343,6 +1344,7 @@ DND5E.validProperties = {
   ]),
   tool: new Set([
     "concentration",
+    "foc",
     "mgc"
   ])
 };

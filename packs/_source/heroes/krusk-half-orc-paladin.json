@@ -602,7 +602,9 @@
           "baseItem": ""
         },
         "container": null,
-        "properties": []
+        "properties": [
+          "foc"
+        ]
       },
       "sort": 0,
       "flags": {},
@@ -613,12 +615,12 @@
         "default": 0
       },
       "_stats": {
-        "systemId": null,
-        "systemVersion": null,
-        "coreVersion": null,
+        "systemId": "dnd5e",
+        "systemVersion": "3.0.1",
+        "coreVersion": "11.315",
         "createdTime": null,
-        "modifiedTime": null,
-        "lastModifiedBy": null
+        "modifiedTime": 1707060736030,
+        "lastModifiedBy": "dnd5ebuilder0000"
       },
       "_key": "!actors.items!Dh1AA6w104V17V6w.mmNOUJeTSbhakKbO"
     },
