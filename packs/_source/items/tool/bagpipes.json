@@ -36,7 +36,9 @@
       "description": ""
     },
     "container": null,
-    "properties": []
+    "properties": [
+      "foc"
+    ]
   },
   "effects": [],
   "folder": "uvZXbqK3cHirDzeT",
@@ -47,10 +49,10 @@
   "flags": {},
   "_stats": {
     "systemId": "dnd5e",
-    "systemVersion": "3.0.0",
+    "systemVersion": "3.0.1",
     "coreVersion": "11.315",
     "createdTime": 1661787233973,
-    "modifiedTime": 1704823166498,
+    "modifiedTime": 1707061343038,
     "lastModifiedBy": "dnd5ebuilder0000"
   },
   "_key": "!items!yxHi57T5mmVt0oDr"
