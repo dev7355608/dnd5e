@@ -94,8 +94,14 @@ export default class TokenDocument5e extends SystemFlagsMixin(TokenDocument) {
 
   /** @inheritdoc */
   async toggleActiveEffect(effectData, {overlay=false, active}={}) {
+    /** @deprecated since v12 */
+    if ( foundry.utils.isNewerVersion(game.version, 12) ) {
+      foundry.utils.logCompatibilityWarning("TokenDocument#toggleActiveEffect is deprecated in favor of "
+        + "Actor#toggleStatusEffect", {since: 12, until: 14});
+    }
+
     if ( !this.actor || !effectData.id ) return false;
-    const id = staticID(`dnd5e${effectData.id}`);
+    const id = effectData._id;
 
     // Remove existing effects that contain this effect data's primary ID as their primary ID.
     const existing = this.actor.effects.get(id);

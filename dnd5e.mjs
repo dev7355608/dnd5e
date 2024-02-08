@@ -298,9 +298,10 @@ function _configureFonts() {
  * Configure system status effects.
  */
 function _configureStatusEffects() {
-  const addEffect = (effects, data) => {
+  const addEffect = (effects, {special, ...data}) => {
+    data._id = utils.staticID(`dnd5e${data.id}`);
     effects.push(data);
-    if ( "special" in data ) CONFIG.specialStatusEffects[data.special] = data.id;
+    if ( special ) CONFIG.specialStatusEffects[special] = data.id;
   };
   CONFIG.statusEffects = Object.entries(CONFIG.DND5E.statusEffects).reduce((arr, [id, data]) => {
     const original = CONFIG.statusEffects.find(s => s.id === id);

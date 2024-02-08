@@ -49,16 +49,18 @@ export default class ActiveEffect5e extends ActiveEffect {
     if ( foundry.utils.getType(effectData) !== "Object" ) return;
     const createData = {
       ...foundry.utils.deepClone(effectData),
-      _id: staticID(`dnd5e${effectData.id}`),
-      name: game.i18n.localize(effectData.name),
-      statuses: [effectData.id, ...effectData.statuses ?? []]
+      name: game.i18n.localize(effectData.name ?? effectData.label),
+      img: effectData.img ?? effectData.icon,
+      statuses: Array.from(new Set([effectData.id, ...effectData.statuses ?? []]))
     };
-    if ( !("description" in createData) && effectData.reference ) {
+    if ( !createData.description && effectData.reference ) {
       const page = await fromUuid(effectData.reference);
       createData.description = page?.text.content ?? "";
     }
-    this.migrateDataSafe(createData);
-    this.cleanData(createData);
+    delete createData.id;
+    delete createData.label;
+    delete createData.icon;
+    delete createData.reference;
     return new this(createData, { keepId: true, ...options });
   }
 
@@ -290,6 +292,19 @@ export default class ActiveEffect5e extends ActiveEffect {
     this.icon = `systems/dnd5e/icons/svg/statuses/exhaustion-${level}.svg`;
     this.name = `Exhaustion ${level}`;
     if ( level >= 6 ) this.statuses.add("dead");
+  }
+
+  /* -------------------------------------------- */
+
+  /** @inheritDoc */
+  async _preCreate(data, options, user) {
+    if ( (await super._preCreate(data, options, user)) === false ) return false;
+
+    if ( !this._id || this.description ) return;
+    const status = CONFIG.statusEffects.find(e => e._id === this._id);
+    if ( !status || !status.reference ) return;
+    const page = status.reference ? await fromUuid(status.reference) : null;
+    this.updateSource({description: page?.text.content ?? ""});
   }
 
   /* -------------------------------------------- */
